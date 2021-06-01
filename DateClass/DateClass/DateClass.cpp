@@ -4,7 +4,7 @@ inline int GetDay(int year, int month)									//·µ»Øµ±ÔÂ×î´óÈÕÆÚ£¬Æµ·±µ÷ÓÃËùÒÔÄ
 {
 	static int days[12] = { 31,28,31,30,31,30,31,31,30,31,30,31 };		//12¸öÔÂµÄÈÕÆÚ,Ö»´´½¨Ò»´Î£¬·ÅÔÚ¾²Ì¬Çø
 	int day = days[month - 1];
-	if (month == 2 && (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0) )		//ÅĞ¶ÏÈòÄê
+	if (month == 2 && ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0)) )		//ÅĞ¶ÏÈòÄê
 	{
 		day = 29; 
 	}
@@ -45,6 +45,7 @@ Date& Date::operator+=(int day)						//
 
 		while (_day > GetDay(_year, _month))			//ÅĞ¶ÏdayÊÇ·ñºÏ·¨£¬²»ºÏ·¨¾ÍÔÂ·İ+1£¬ÔÂ·İ³¬³ö¾ÍÖÃ1£¬Äê++£»
 		{
+			cout << GetDay(_year, _month) << _month<<endl;
 			_day -= GetDay(_year, _month);
 			_month++;
 			if (_month > 12)

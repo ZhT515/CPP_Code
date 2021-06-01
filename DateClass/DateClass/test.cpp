@@ -11,9 +11,9 @@ void Test1()
 
 void Test2()			//+
 {
-	Date d1(2021, 5, 29);
+	Date d1(2008, 2, 3);
 
-	d1 += 10;
+	d1 += 60;
 	d1.Print();
 
 	Date d2(2021, 12, 29);
@@ -118,5 +118,5 @@ void Test7()
 
 int main()
 {
-	Test7();
+	Test2();
 }
