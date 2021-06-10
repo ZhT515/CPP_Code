@@ -102,5 +102,42 @@ int main()
 
 	cout << s3 << endl;
 
+	string s7(s2);
+
+	cout << s7.size() << endl;
+	cout << s7.capacity() << endl;			//空间大小
+
+	s7.clear();								//清空
+
+	cout << s7.size() << endl;
+	cout << s7.capacity() << endl;
+
+	string s8;
+	cout << s8.size() << endl;
+	cout << s8.capacity() << endl;
+
+	s8.resize(20,'x');		//插入n个x,默认\0；已有的话追加，把总空间变成指定的
+
+	cout << s8.size() << endl;
+	cout << s8.capacity() << endl;
+
+	s8.reserve(50);					//不影响已有的
+
+	cout << s8.size() << endl;
+	cout << s8.capacity() << endl;
+
+	cout << s8 << endl;					//重载的<<
+	cout << s8.c_str() << endl;			//c的方式，配合C使用的接口
+
+	string filename = "test.cpp";
+	//找文件后缀
+	size_t pos = filename.find('.');		//找位置  rfind反着找
+
+	if (pos != string::npos)
+	{
+		string suff = filename.substr(pos);
+	}
+
+
 	return 0;
 }
