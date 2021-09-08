@@ -74,6 +74,20 @@ namespace Zht
         _start = _finsh = _endofstorage = nullptr;
       }
 
+      // 若使用iterator做迭代器，会导致初始化的迭代器区间[first,last)只能是vector的迭代器
+      // 重新声明迭代器，迭代器区间[first,last)可以是任意容器的迭代器
+      template <class InputIterator>
+      vector(InputIterator first, InputIterator last)
+      {
+        reserve(last - first);
+
+        while(first != last)
+        {
+          push_back(*first);
+          ++first;
+        }
+      }
+
       iterator begin()
       {
         return _start;
