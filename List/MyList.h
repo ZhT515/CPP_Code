@@ -1,5 +1,6 @@
 #include <iostream>
 #include <list>
+#include <assert.h>
 #include <vector>
 #include <algorithm>
 #include <functional>
@@ -82,6 +83,10 @@ namespace Zht
       return tmp;
     }
 
+    Ptr operator->()
+    {
+      return &(operator*());      
+    }
   };
 
   template <class T>
@@ -98,6 +103,46 @@ namespace Zht
           _head = new node;           //开一个节点
           _head->_next = _head;       //初始化节点
           _head->_prev = _head;
+      }
+
+      template <class Iterator>
+      list(Iterator first, Iterator last)
+      {
+        _head = new node;
+        _head->_next = _head;
+        _head->_prev = _head;
+
+        while(first != last)
+        {
+          push_back(*first);
+          first++;
+        }
+      }
+
+      list(const list<T>& It)
+      {
+        _head = new node;                   //构造哨兵节点
+        _head->_next = _head;     
+        _head->_prev = _head;
+
+        for(const auto& e : It)             //逐个尾插
+        {
+          push_back(e);
+        }
+      }
+
+      list<T>& operator=(list<T> It)
+      {
+        swap(_head, It._head);
+
+        return *this;
+      }
+
+      ~list()
+      {
+        clear();
+        delete _head;
+        _head = nullptr;
       }
 
       iterator begin()
@@ -122,14 +167,92 @@ namespace Zht
 
       void push_back(const T& x)        //只有哨兵位的也可以通用
       {
-          node* newnode = new node(x);    //创建新节点
+         /* node* newnode = new node(x);    //创建新节点
           node* tail = _head->_prev;      //当前的最后一个节点
 
           tail->_next = newnode;        
           newnode->_next = _head;
           newnode->_prev = tail;
-          _head->_prev = newnode;
+          _head->_prev = newnode;*/
+
+        insert(iterator(end()), x);     //前一个就是尾
       }
+      
+      void push_front(const T& x)
+      {
+        insert(iterator(begin),x);
+      }
+
+      void pop_back()
+      {
+        erase(iterator(--end()));
+      }
+
+      void pop_front()
+      {
+        erase(iterator(begin()));
+      }
+      
+      iterator insert(iterator pos, const T& val)       //pos位置前插入
+      {
+        node* newnode = new node(val);
+        node* tail = pos._pnode;
+
+        newnode->_next = tail;
+        newnode->_prev = tail->_prev;
+        newnode->_prev->_next = newnode;              //还要让前一个指向自己
+        pos._pnode->_prev = newnode;
+
+        return iterator(newnode);                     //需要返回迭代器；
+      }
+
+      iterator erase(iterator pos)    //删除pos位置        
+      {
+        assert(pos._pnode);
+        assert(pos != end());
+
+        node* tail = pos._pnode;
+        node* ret = tail->_next;
+        tail->_prev->_next = tail->_next;
+        tail->_next->_prev = tail->_prev;
+
+        delete tail;
+
+        return iterator(ret);       //返回下一个
+      }
+
+      bool empty()
+      {
+        return begin() == end();
+      }
+
+      size_t size()
+      {
+        size_t sz = 0;
+        iterator it = begin();
+
+        while(it != end())
+        {
+          sz++;
+          it++;
+        }
+
+        return sz;
+      }
+
+      void clear()
+      {
+        iterator it = begin();
+
+        while(it != end())
+        {
+          erase(it);
+          it++;
+        }
+      }
+
+      
+
   private:
       node* _head;
   };
